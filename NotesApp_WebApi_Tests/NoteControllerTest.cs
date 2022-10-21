@@ -17,7 +17,7 @@ namespace NotesApp_WebApi_Tests
     {
         
         private readonly NoteController _controller;
-        private readonly IService<Note> _service;
+        private readonly IService<NoteDto> _service;
         public NoteControllerTest()
         {
             _service = new NoteServiceFake();
@@ -41,7 +41,7 @@ namespace NotesApp_WebApi_Tests
             var okResult = await _controller.GetNotes() as OkObjectResult;
 
             // Assert
-            var items = Assert.IsType<List<Note>>(okResult.Value);
+            var items = Assert.IsType<List<NoteDto>>(okResult.Value);
             Assert.Equal(3, items.Count);
         }
 
@@ -78,15 +78,15 @@ namespace NotesApp_WebApi_Tests
             var okResult = await _controller.GetNoteById(testGuid) as OkObjectResult;
 
             // Assert
-            Assert.IsType<Note>(okResult.Value);
-            Assert.Equal(testGuid, (okResult.Value as Note).Id);
+            Assert.IsType<NoteDto>(okResult.Value);
+            Assert.Equal(testGuid, (okResult.Value as NoteDto).Id);
         }
 
         [Fact]
         public async void Add_InvalidObjectPassed_ReturnsBadRequest()
         {
             // Arrange
-            var nameMissingItem = new Note()
+            var nameMissingItem = new NoteDto()
             {
                 Title = "Guinness"
 
@@ -104,7 +104,7 @@ namespace NotesApp_WebApi_Tests
         public async void Add_ValidObjectPassed_ReturnsCreatedResponse()
         {
             // Arrange
-            var testItem = new Note()
+            var testItem = new NoteDto()
             {
                 Title = "Guinness Original 6 Pack",
                 Description = "Guinness"
@@ -121,7 +121,7 @@ namespace NotesApp_WebApi_Tests
         public async void Add_ValidObjectPassed_ReturnedResponseHasCreatedItem()
         {
             // Arrange
-            var testItem = new Note()
+            var testItem = new NoteDto()
             {
                 Title = "Guinness Original 6 Pack",
                 Description = "Guinness"

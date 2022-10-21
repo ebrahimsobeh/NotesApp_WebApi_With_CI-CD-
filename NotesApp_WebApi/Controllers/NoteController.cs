@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NotesApp_WebApi.Contracts;
 using NotesApp_WebApi.Data;
 using NotesApp_WebApi.Models;
+using NotesApp_WebApi.Services;
 
 namespace NotesApp_WebApi.Controllers
 {
@@ -12,24 +14,26 @@ namespace NotesApp_WebApi.Controllers
 
     public class NoteController : ControllerBase
     {
-        private readonly IService<Note> _service;
-        public NoteController(IService<Note> service)
+        private readonly INoteService _service;
+
+         public NoteController(INoteService service, IMapper mapper)
         {
             _service = service;
+            
         }
 
 
         [HttpGet]
-        public async Task<IActionResult> GetNotes()
+        public  IActionResult GetNotes()
         {
-            return Ok(await _service.GetAllItems());
+            return Ok(_service.GetAllNotes());
         }
         
         [HttpGet]
         [Route("{id:guid}")]
-        public async Task<IActionResult> GetNoteById([FromRoute] Guid id)
+        public  IActionResult GetNoteById([FromRoute] Guid id)
         {
-            var note = await _service.GetById(id);
+            var note =  _service.GetNote(id);
             if (note == null)
             {
                 return NotFound();
@@ -38,51 +42,34 @@ namespace NotesApp_WebApi.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> AddNote(Note AddNoteRequest)
+        public IActionResult AddNote([FromBody]NoteDto AddNoteRequest)
         {
-            if(AddNoteRequest.Title !=null && AddNoteRequest.Description!=null) {
-                var note = new Note()
-                {
-                    Title = AddNoteRequest.Title,
-                    Description = AddNoteRequest.Description
+            
+                
 
-                };
+                _service.InsertNote(AddNoteRequest);
 
-                await _service.Add(note);
-                return Ok(note);
-
-            }
-            return BadRequest();
+                return Ok("Data Inserted");
             
         }
 
         
         [HttpPut]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateNote([FromRoute] Guid id, Note updateNoteRequest)
+        public  IActionResult UpdateNote( [FromBody]NoteDto note)
         {
-            var note = await _service.GetById(id);
-            if (note != null)
-            {
-
-                await _service.Update(id, updateNoteRequest);
-                return Ok(note);
-            }
-            return NotFound();
+            _service.UpdateNote(note);
+                return Ok("updated");
+            
         }
 
 
         [HttpDelete]
         [Route("{id:guid}")]
-        public async Task<IActionResult> DeleteNoteById([FromRoute] Guid id)
-        {
-            var note = await _service.GetById(id);
-            if (note != null)
-            {
-                await _service.Remove(id);
-                return Ok(note);
-            }
-            return NotFound();
+        public IActionResult DeleteNoteById([FromRoute] Guid id)
+        { 
+                 _service.DeleteNote(id);
+                return Ok("data deleted");
+           
         }
         
     }

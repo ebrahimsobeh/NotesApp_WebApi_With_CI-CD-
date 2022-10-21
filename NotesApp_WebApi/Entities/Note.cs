@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace NotesApp_WebApi.Models
+namespace NotesApp_WebApi.Entities
 {
  
     public class Note

@@ -12,8 +12,8 @@ using NotesApp_WebApi.Data;
 namespace NotesApp_WebApi.Migrations
 {
     [DbContext(typeof(NotesApiDbContext))]
-    [Migration("20221015204300_second migration")]
-    partial class secondmigration
+    [Migration("20221021172955_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace NotesApp_WebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("NotesApp_WebApi.Models.Note", b =>
+            modelBuilder.Entity("NotesApp_WebApi.Entities.Note", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

@@ -22,7 +22,7 @@ namespace NotesApp_WebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("NotesApp_WebApi.Models.Note", b =>
+            modelBuilder.Entity("NotesApp_WebApi.Entities.Note", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

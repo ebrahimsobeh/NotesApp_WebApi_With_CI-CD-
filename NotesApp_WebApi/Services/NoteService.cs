@@ -1,78 +1,61 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NotesApp_WebApi.Contracts;
 using NotesApp_WebApi.Data;
+using NotesApp_WebApi.Entities;
 using NotesApp_WebApi.Models;
+using NotesApp_WebApi.Entities;
+
+using NotesApp_WebApi.Repository;
 
 namespace NotesApp_WebApi.Services
 {
-    public class NoteService : IService<Note>
+    public class NoteService : INoteService
     {
-        private readonly NotesApiDbContext dbContext;
+        private IRepository<Note> _noteRepository;
+        private readonly IMapper _mapper;
 
-        public NoteService(NotesApiDbContext dbContext)
+
+        public NoteService(IRepository<Note> noteRepository, IMapper mapper)
         {
-            this.dbContext = dbContext;
+            _noteRepository = noteRepository;
+            this._mapper = mapper;
+
         }
 
-        public async Task<IEnumerable<Note>> GetAllItems()
+        public void DeleteNote(Guid id)
         {
-            return await dbContext.Notes.ToListAsync();
-        }
-        public async Task<Note> Add(Note newItem)
-        {
-            var note = new Note()
-            {
-                Title = newItem.Title,
-                Description = newItem.Description
-            };
+            Note note = GetNote(id);
 
-            await dbContext.Notes.AddAsync(note);
-            await dbContext.SaveChangesAsync();
+            //GetNote(id);
+            _noteRepository.Delete(note.Id);
+            _noteRepository.Save();
+
+        }
+
+        public IEnumerable<NoteDto> GetAllNotes()
+        {
+            return _mapper.Map<IEnumerable<NoteDto>>(_noteRepository.GetAll());
+
+        }
+
+        public Note GetNote(Guid id)
+        {
+           return _noteRepository.GetById(id);
+        }
+
+        public void InsertNote(NoteDto notedto)
+        { 
+            _noteRepository.Insert(_mapper.Map<Note>(notedto));
+            _noteRepository.Save();
             
-            return note;
         }
 
-        
-
-        public async Task<Note> GetById(Guid id)
+        public void UpdateNote(NoteDto notedto)
         {
-            var note = await dbContext.Notes.FindAsync(id);
-            if (note != null)
-            {
-                return note;
-            }
-            return null;
-
-        }
-
-        public async Task<Note> Remove(Guid id)
-        {
-            var note = await dbContext.Notes.FindAsync(id);
-            if (note != null)
-            {
-                 dbContext.Notes.Remove(note);
-                await dbContext.SaveChangesAsync();
-                return note;
-            }
-            return null;
-        }
-
-        public async Task<Note> Update(Guid id,Note newItem)
-        {
-            var note = await dbContext.Notes.FindAsync(id);
-            if (note != null)
-            {
-                note.Title = newItem.Title;
-                note.Description = newItem.Description;
-                
-                dbContext.Update(note);
-                dbContext.SaveChangesAsync();
-                
-                return note;
-            }
-            return null;
-
+            _noteRepository.Update(_mapper.Map<Note>(notedto));
+            _noteRepository.Save();
 
         }
     }
