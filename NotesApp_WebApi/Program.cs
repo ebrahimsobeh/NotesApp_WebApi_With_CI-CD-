@@ -14,9 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<NotesApiDbContext>(option => option.UseInMemoryDatabase("NotesDb"));
-//builder.Services.AddDbContext<NotesApiDbContext>(option => option.UseSqlServer(
-//    builder.Configuration.GetConnectionString("NotesApiConnectionString")));
+//builder.Services.AddDbContext<NotesApiDbContext>(option => option.UseInMemoryDatabase("NotesDb"));
+builder.Services.AddDbContext<NotesApiDbContext>(option => option.UseSqlServer(
+    builder.Configuration.GetConnectionString("NoteConnectionString")));
 builder.Services.AddControllers();
 // Add services to the container.
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
