@@ -7,12 +7,12 @@ on:
     - master
 
 env:
-  AZURE_WEBAPP_NAME: note-app-service
+  AZURE_WEBAPP_NAME: noteapplicationcicd
   AZURE_WEBAPP_PACKAGE_PATH: "./publish"
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     
     steps:
       - uses: actions/checkout@v3
