@@ -26,7 +26,7 @@ builder.Services.AddDbContext<NotesApiDbContext>(option => option.UseInMemoryDat
 
 
 var app = builder.Build();
-
+//test CI/CD
 // Configure the HTTP request pipeline.
 /*if (app.Environment.IsDevelopment())
 {
