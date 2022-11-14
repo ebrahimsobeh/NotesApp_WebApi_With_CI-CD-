@@ -7,7 +7,7 @@ namespace NotesApp_WebApi.Services
     public interface INoteService
     {
         Task<IEnumerable<NoteDto>> GetAllNotes();
-        Task<Note> GetNote(Guid id);
+        Task<NoteDto> GetNote(Guid id);
         Task InsertNote(NoteDto note);
         Task UpdateNote(NoteDto note);
         Task DeleteNote(Guid

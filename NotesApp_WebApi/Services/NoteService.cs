@@ -40,9 +40,11 @@ namespace NotesApp_WebApi.Services
 
         }
 
-        public async Task<Note> GetNote(Guid id)
+        public async Task<NoteDto> GetNote(Guid id)
         {
-           return await _noteRepository.GetById(id);
+           
+            return _mapper.Map<NoteDto>(_noteRepository.GetById(id));
+         
         }
 
         public async Task InsertNote(NoteDto notedto)

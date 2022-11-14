@@ -16,12 +16,13 @@ namespace NotesApp_WebApi.Controllers
     {
         private readonly INoteService _service;
 
-         public NoteController(INoteService service, IMapper mapper)
+         public NoteController(INoteService service)
         {
             _service = service;
             
         }
 
+      
 
         [HttpGet]
         public  async Task<IActionResult> GetNotes()
@@ -46,10 +47,15 @@ namespace NotesApp_WebApi.Controllers
         {
             
                 
-
-               await _service.InsertNote(AddNoteRequest);
+            if(AddNoteRequest.Description!= null  && AddNoteRequest.Title != null)
+            {
+                await _service.InsertNote(AddNoteRequest);
 
                 return Ok("Data Inserted");
+
+            }
+            return BadRequest();
+              
             
         }
 
@@ -67,9 +73,15 @@ namespace NotesApp_WebApi.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> DeleteNoteById([FromRoute] Guid id)
         { 
-                 await _service.DeleteNote(id);
-                return Ok("data deleted");
-           
+                
+
+            var note = await _service.GetNote(id);
+            if (note == null)
+            {
+                return NotFound();
+            }
+            await _service.DeleteNote(id);
+            return Ok("data deleted");
         }
         
     }
