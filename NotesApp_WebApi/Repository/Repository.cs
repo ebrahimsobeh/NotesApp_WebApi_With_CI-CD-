@@ -13,31 +13,31 @@ namespace NotesApp_WebApi.Repository
             this._context = _context;
             table = _context.Set<T>();
         }
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return table.ToList();
+            return  await table.ToListAsync();
         }
-        public T GetById(Guid id)
+        public async Task<T> GetById(Guid id)
         {
-            return table.Find(id);
+            return await table.FindAsync(id);
         }
-        public void Insert(T obj)
+        public async Task Insert(T obj)
         {
-            table.Add(obj);
+            await table.AddAsync(obj);
         }
-        public void Update(T obj)
+        public async Task Update(T obj)
         {
-            table.Attach(obj);
+             table.Attach(obj);
             _context.Entry(obj).State = EntityState.Modified;
         }
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            T existing = table.Find(id);
+            T existing =await table.FindAsync(id);
             table.Remove(existing);
         }
-        public void Save()
+        public async Task Save()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 

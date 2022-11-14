@@ -6,11 +6,11 @@ namespace NotesApp_WebApi.Services
 {
     public interface INoteService
     {
-        IEnumerable<NoteDto> GetAllNotes();
-        Note GetNote(Guid id);
-        void InsertNote(NoteDto note);
-        void UpdateNote(NoteDto note);
-        void DeleteNote(Guid
+        Task<IEnumerable<NoteDto>> GetAllNotes();
+        Task<Note> GetNote(Guid id);
+        Task InsertNote(NoteDto note);
+        Task UpdateNote(NoteDto note);
+        Task DeleteNote(Guid
             id);
 
     }

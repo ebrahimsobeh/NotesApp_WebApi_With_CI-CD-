@@ -24,16 +24,16 @@ namespace NotesApp_WebApi.Controllers
 
 
         [HttpGet]
-        public  IActionResult GetNotes()
+        public  async Task<IActionResult> GetNotes()
         {
-            return Ok(_service.GetAllNotes());
+            return Ok(await _service.GetAllNotes());
         }
         
         [HttpGet]
         [Route("{id:guid}")]
-        public  IActionResult GetNoteById([FromRoute] Guid id)
+        public  async Task<IActionResult> GetNoteById([FromRoute] Guid id)
         {
-            var note =  _service.GetNote(id);
+            var note =  await _service.GetNote(id);
             if (note == null)
             {
                 return NotFound();
@@ -42,12 +42,12 @@ namespace NotesApp_WebApi.Controllers
         }
         
         [HttpPost]
-        public IActionResult AddNote([FromBody]NoteDto AddNoteRequest)
+        public async Task<IActionResult> AddNote([FromBody]NoteDto AddNoteRequest)
         {
             
                 
 
-                _service.InsertNote(AddNoteRequest);
+               await _service.InsertNote(AddNoteRequest);
 
                 return Ok("Data Inserted");
             
@@ -55,19 +55,19 @@ namespace NotesApp_WebApi.Controllers
 
         
         [HttpPut]
-        public  IActionResult UpdateNote( [FromBody]NoteDto note)
+        public  async Task<IActionResult> UpdateNote( [FromBody]NoteDto note)
         {
-            _service.UpdateNote(note);
-                return Ok("updated");
+            await _service.UpdateNote(note);
+                return  Ok("updated");
             
         }
 
 
         [HttpDelete]
         [Route("{id:guid}")]
-        public IActionResult DeleteNoteById([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteNoteById([FromRoute] Guid id)
         { 
-                 _service.DeleteNote(id);
+                 await _service.DeleteNote(id);
                 return Ok("data deleted");
            
         }

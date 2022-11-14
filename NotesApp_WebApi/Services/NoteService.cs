@@ -24,38 +24,38 @@ namespace NotesApp_WebApi.Services
 
         }
 
-        public void DeleteNote(Guid id)
+        public async Task DeleteNote(Guid id)
         {
-            Note note = GetNote(id);
+            Note note =await _noteRepository.GetById(id);
 
             //GetNote(id);
-            _noteRepository.Delete(note.Id);
-            _noteRepository.Save();
+              _noteRepository.Delete(note.Id);
+              _noteRepository.Save();
 
         }
 
-        public IEnumerable<NoteDto> GetAllNotes()
+        public async Task<IEnumerable<NoteDto>> GetAllNotes()
         {
-            return _mapper.Map<IEnumerable<NoteDto>>(_noteRepository.GetAll());
+            return _mapper.Map<IEnumerable<NoteDto>>(await _noteRepository.GetAll());
 
         }
 
-        public Note GetNote(Guid id)
+        public async Task<Note> GetNote(Guid id)
         {
-           return _noteRepository.GetById(id);
+           return await _noteRepository.GetById(id);
         }
 
-        public void InsertNote(NoteDto notedto)
+        public async Task InsertNote(NoteDto notedto)
         { 
-            _noteRepository.Insert(_mapper.Map<Note>(notedto));
-            _noteRepository.Save();
+            await _noteRepository.Insert(_mapper.Map<Note>(notedto));
+            await _noteRepository.Save();
             
         }
 
-        public void UpdateNote(NoteDto notedto)
+        public async Task UpdateNote(NoteDto notedto)
         {
-            _noteRepository.Update(_mapper.Map<Note>(notedto));
-            _noteRepository.Save();
+            await _noteRepository.Update(_mapper.Map<Note>(notedto));
+            await _noteRepository.Save();
 
         }
     }
