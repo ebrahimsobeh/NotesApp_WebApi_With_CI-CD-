@@ -7,22 +7,23 @@ using NotesApp_WebApi.Repository;
 using NotesApp_WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddTransient<INoteService, NoteService>();
+ 
 
 
-
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 builder.Services.AddDbContext<NotesApiDbContext>(option => option.UseInMemoryDatabase("NotesDb"));
 //builder.Services.AddDbContext<NotesApiDbContext>(option => option.UseSqlServer(
 //    builder.Configuration.GetConnectionString("NotesApiConnectionString")));
+builder.Services.AddControllers();
+// Add services to the container.
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddTransient<INoteService, NoteService>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+
+
 
 
 var app = builder.Build();
@@ -44,4 +45,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 //hello
-app.RunAsync();
+app.Run();
